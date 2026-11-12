@@ -33,3 +33,16 @@ def test_invalid_confidence_is_rejected():
     with pytest.raises(ValueError, match="alpha"):
         historical_var_es(np.array([-0.1, 0.1]), alpha=1.0)
 
+
+def test_walk_forward_parameters_require_integer_window_and_valid_alpha():
+    values = np.array([-0.1, 0.0, 0.1, 0.02])
+    with pytest.raises(ValueError, match="integer"):
+        rolling_var_es(values, lookback=2.5, alpha=0.75)
+    with pytest.raises(ValueError, match="alpha"):
+        rolling_var_es(values, lookback=2, alpha=np.nan)
+
+
+def test_kupiec_requires_binary_exception_indicators():
+    with pytest.raises(ValueError, match="binary"):
+        kupiec_pof_lr(np.array([0, 2, 1]), alpha=0.8)
+
